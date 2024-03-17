@@ -1,0 +1,8 @@
+# Mac stuff
+.DS_Store
+
+# Don't clutter with this stuff
+*/.ipynb_checkpoints/*
+.ipynb_checkpoints/*
+
+**/*.pyc
