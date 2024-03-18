@@ -21,11 +21,21 @@ import datetime
 # default -> False (just get very few printouts)
 debug = False
 
+# Use local copies to limit traffic
+local = True
+
 
 # unofficial api, returns events
-with libreq.urlopen('https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/events.json') as file:
-    # the file is understood as json
-    json_data_e = json.load(file)
+if local:
+    with open('../local/events.json') as file:
+        # the file is understood as json
+        json_data_e = json.load(file)
+else:
+    with libreq.urlopen('https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/events.json') as file:
+        # the file is understood as json
+        json_data_e = json.load(file)
+        with open('../local/events.json', 'w') as f:
+            json.dump(json_data_e, f)
 e_list = [i['id'] for i in json_data_e['items']]
 
 # model state dictionary with singles and averages, for each state, for each event
@@ -36,25 +46,33 @@ for s in info.id_state.keys():
     wca_ids_s = info.id_state[s]
     print(wca_ids_s)
     for wca_id in wca_ids_s:
-        with libreq.urlopen(f'https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/persons/{wca_id}.json') as file:
-            json_data_p = json.load(file)
-            # ToDo: check for country == / != de
-            # collect single / average results per person for each event they have a result in
-            # for now, WCA ID, full name, best result (numerical value as in DB, not yet human-readable) and NR, CR, WR
-            for e in json_data_p['rank']['singles']:
-                state_r[s]['single'][e['eventId']].append([json_data_p['id'],
-                                                           json_data_p['name'],
-                                                           e['best'],
-                                                           e['rank']['country'],
-                                                           e['rank']['continent'],
-                                                           e['rank']['world']])
-            for e in json_data_p['rank']['averages']:
-                state_r[s]['average'][e['eventId']].append([json_data_p['id'],
-                                                            json_data_p['name'],
-                                                            e['best'],
-                                                            e['rank']['country'],
-                                                            e['rank']['continent'],
-                                                            e['rank']['world']])
+        if local:
+            with open(f'../local/persons/{wca_id}.json') as file:
+                json_data_p = json.load(file)
+        else:
+            with libreq.urlopen(f'https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/persons/{wca_id}.json') as file:
+                json_data_p = json.load(file)
+                with open(f'../local/persons/{wca_id}.json', 'w') as f:
+                    json.dump(json_data_p, f)
+        # ToDo: check for country == / != de
+        # collect single / average results per person for each event they have a result in
+        # for now, WCA ID, full name, best result (numerical value as in DB, not yet human-readable) and NR, CR, WR
+        for e in json_data_p['rank']['singles']:
+            state_r[s]['single'][e['eventId']].append([json_data_p['id'],
+                                                       json_data_p['name'],
+                                                       e['best'],
+                                                       e['rank']['country'],
+                                                       e['rank']['continent'],
+                                                       e['rank']['world'],
+                                                       json_data_p['country']])
+        for e in json_data_p['rank']['averages']:
+            state_r[s]['average'][e['eventId']].append([json_data_p['id'],
+                                                        json_data_p['name'],
+                                                        e['best'],
+                                                        e['rank']['country'],
+                                                        e['rank']['continent'],
+                                                        e['rank']['world'],
+                                                        json_data_p['country']])
 
 # the rankings need to be sorted,
 # otherwise we just have them as they appear in the discord reaction roles
@@ -64,8 +82,8 @@ for st,dicts in zip(state_r.keys(),state_r.values()):
         if debug:
             print(s)
             print(sd)
-        # if tied on rank (index 3 in inner list), sort by name instead (index 1 in inner list)
-        sd.sort(key=itemgetter(3,1))
+        # if tied on best result (index 2 in inner list), sort by name instead (index 1 in inner list)
+        sd.sort(key=itemgetter(2,1))
         if debug:
             print(sd)
         state_r[st]['single'][s] = sd
@@ -74,7 +92,7 @@ for st,dicts in zip(state_r.keys(),state_r.values()):
             print(s)
             print(sd)
         # same here, just for averages (more precise: mean or average)
-        sd.sort(key=itemgetter(3,1))
+        sd.sort(key=itemgetter(2,1))
         if debug:
             print(sd)
         state_r[st]['average'][s] = sd
@@ -198,6 +216,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                 th('WR')
                                 th('CR')
                                 th('NR')
+                                th('Country')
                         with tbody():
                             for sid in s:
                                 if debug:
@@ -205,11 +224,12 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                 with tr():
                                     th(sid[0])
                                     th(sid[2])
-                                    th(sid[1])
+                                    th(a(sid[1], href=f'https://www.worldcubeassociation.org/persons/{sid[1]}'))
                                     th(sid[3])
                                     th(sid[6])
                                     th(sid[5])
                                     th(sid[4])
+                                    th(sid[7])
                 for ea, aa in zip(overview['average'].keys(),overview['average'].values()):
                     if debug:
                         print(ea, aa)
@@ -224,16 +244,18 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                 th('WR')
                                 th('CR')
                                 th('NR')
+                                th('Country')
                         with tbody():
                             for aid in aa:
                                 with tr():
                                     th(aid[0])
                                     th(aid[2])
-                                    th(aid[1])
+                                    th(a(aid[1], href=f'https://www.worldcubeassociation.org/persons/{aid[1]}'))
                                     th(aid[3])
                                     th(aid[6])
                                     th(aid[5])
                                     th(aid[4])
+                                    th(aid[7])
         
         # main page
         elif variant == 'index':
@@ -263,15 +285,27 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                 th('WR')
                                 th('CR')
                                 th('NR')
+                                th('Country')
                         with tbody():
                             for sid in s:
-                                with tr():
-                                    th(sid[1])
-                                    th(sid[0])
-                                    th(sid[2])
-                                    th(sid[5])
-                                    th(sid[4])
-                                    th(sid[3])
+                                if sid[6] == 'DE':
+                                    with tr():
+                                        th(sid[1])
+                                        th(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'))
+                                        th(sid[2])
+                                        th(sid[5])
+                                        th(sid[4])
+                                        th(sid[3])
+                                        th(sid[6])
+                                else:
+                                    with tr():
+                                        th(sid[1], style='font-style:italic;color:#A4A4A4;')
+                                        th(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'), style='font-style:italic;color:#A4A4A4;')
+                                        th(sid[2], style='font-style:italic;color:#A4A4A4;')
+                                        th(sid[5], style='font-style:italic;color:#A4A4A4;')
+                                        th(sid[4], style='font-style:italic;color:#A4A4A4;')
+                                        th(sid[3], style='font-style:italic;color:#A4A4A4;')
+                                        th(sid[6], style='font-style:italic;color:#A4A4A4;')
                 for ea, aa in zip(a_dict.keys(),a_dict.values()):
                     text(ea + ' (Average)')
                     with table():
@@ -283,15 +317,27 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                 th('WR')
                                 th('CR')
                                 th('NR')
+                                th('Country')
                         with tbody():
                             for aid in aa:
-                                with tr():
-                                    th(aid[1])
-                                    th(aid[0])
-                                    th(aid[2])
-                                    th(aid[5])
-                                    th(aid[4])
-                                    th(aid[3])
+                                if aid[6] == 'DE':
+                                    with tr():
+                                        th(aid[1])
+                                        th(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'))
+                                        th(aid[2])
+                                        th(aid[5])
+                                        th(aid[4])
+                                        th(aid[3])
+                                        th(aid[6])
+                                else:
+                                    with tr():
+                                        th(aid[1], style='font-style:italic;color:#A4A4A4;')
+                                        th(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'), style='font-style:italic;color:#A4A4A4;')
+                                        th(aid[2], style='font-style:italic;color:#A4A4A4;')
+                                        th(aid[5], style='font-style:italic;color:#A4A4A4;')
+                                        th(aid[4], style='font-style:italic;color:#A4A4A4;')
+                                        th(aid[3], style='font-style:italic;color:#A4A4A4;')
+                                        th(aid[6], style='font-style:italic;color:#A4A4A4;')
 
         with footer():
             attr(style='text-align: center;height:10rem;clear:both;display:block;')
