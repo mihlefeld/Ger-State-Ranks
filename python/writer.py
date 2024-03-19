@@ -122,9 +122,9 @@ for e in e_list:
                 overview['single'][e] = [[st] + this_states_best_list]
             else:
                 # could be interesting, check if better or equal than already existing ones
-                if this_states_best_list[3] <= overview['single'][e][0][4]:
+                if this_states_best_list[2] <= overview['single'][e][0][3]:
                     # better -> collect as the only state
-                    if this_states_best_list[3] < overview['single'][e][0][4]:
+                    if this_states_best_list[2] < overview['single'][e][0][3]:
                         # currently best -> write state + who achieved that
                         overview['single'][e] = [[st] + this_states_best_list]
                     # just equal -> append
@@ -142,8 +142,8 @@ for e in e_list:
             if len(overview['average'][e]) == 0:
                 overview['average'][e] = [[st] + this_states_best_list]
             else:
-                if this_states_best_list[3] <= overview['average'][e][0][4]:
-                    if this_states_best_list[3] < overview['average'][e][0][4]:
+                if this_states_best_list[2] <= overview['average'][e][0][3]:
+                    if this_states_best_list[2] < overview['average'][e][0][3]:
                         # currently best
                         overview['average'][e] = [[st] + this_states_best_list]
                     else:
