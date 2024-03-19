@@ -22,7 +22,7 @@ import datetime
 debug = False
 
 # Use local copies to limit traffic
-local = True
+local = False
 
 
 # unofficial api, returns events
@@ -121,7 +121,7 @@ for e in e_list:
                 # first result for this evt/single -> collect!
                 overview['single'][e] = [[st] + this_states_best_list]
             else:
-                # could be interesting, check if better or equal then already existing ones
+                # could be interesting, check if better or equal than already existing ones
                 if this_states_best_list[3] <= overview['single'][e][0][4]:
                     # better -> collect as the only state
                     if this_states_best_list[3] < overview['single'][e][0][4]:
