@@ -17,12 +17,34 @@ import info
 # to record when the last update happened
 import datetime
 
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description='Generate new WCA German State Ranks.')
+parser.add_argument('-d', '--debug', default = False,
+                    help='Get detailed printouts')
+parser.add_argument('-l', '--local', default = False,
+                    help='Use locally available json data')
+parser.add_argument('-a', '--automate', default = False,
+                    help='Do not write json data to local dir')
+
+args = parser.parse_args()
+
+print()
+print('>> Running with options:')
+print('>>   debug =', args.debug)
+print('>>   local =', args.local)
+print('>>   automate =', args.automate)
+
 # if you want a bunch of printouts to understand what's going on -> True,
 # default -> False (just get very few printouts)
-debug = False
+debug = args.debug
 
 # Use local copies to limit traffic
-local = False
+local = args.local
+
+# Don't save downloaded jsons when running on schedule (GitHub Action)
+automate = args.automate
+
 
 
 # unofficial api, returns events
@@ -34,17 +56,19 @@ else:
     with libreq.urlopen('https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/events.json') as file:
         # the file is understood as json
         json_data_e = json.load(file)
-        with open('../local/events.json', 'w') as f:
-            json.dump(json_data_e, f)
+        if not automate:
+            with open('../local/events.json', 'w') as f:
+                json.dump(json_data_e, f)
 e_list = [i['id'] for i in json_data_e['items']]
 
 # model state dictionary with singles and averages, for each state, for each event
 state_r = {k : {'single' : {e : [] for e in e_list}, 'average' : {e : [] for e in e_list}} for k in info.id_state.keys()}
 
+print()
 # where the magic happens -> reading the ranks once per WCA ID and writing what we need into the dictionary
 for s in info.id_state.keys():
     wca_ids_s = info.id_state[s]
-    print(wca_ids_s)
+    print('>> Processing', wca_ids_s)
     for wca_id in wca_ids_s:
         if local:
             with open(f'../local/persons/{wca_id}.json') as file:
@@ -52,8 +76,9 @@ for s in info.id_state.keys():
         else:
             with libreq.urlopen(f'https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/persons/{wca_id}.json') as file:
                 json_data_p = json.load(file)
-                with open(f'../local/persons/{wca_id}.json', 'w') as f:
-                    json.dump(json_data_p, f)
+                if not automate:
+                    with open(f'../local/persons/{wca_id}.json', 'w') as f:
+                        json.dump(json_data_p, f)
         # ToDo: check for country == / != de
         # collect single / average results per person for each event they have a result in
         # for now, WCA ID, full name, best result (numerical value as in DB, not yet human-readable) and NR, CR, WR
@@ -77,7 +102,8 @@ for s in info.id_state.keys():
 # the rankings need to be sorted,
 # otherwise we just have them as they appear in the discord reaction roles
 for st,dicts in zip(state_r.keys(),state_r.values()):
-    print('Sorting', st, 'now.')
+    if debug:
+        print('Sorting', st, 'now.')
     for s,sd in zip(dicts['single'].keys(),dicts['single'].values()):
         if debug:
             print(s)
@@ -153,10 +179,11 @@ for e in e_list:
 
 # to show that we are only using a subset of all available results in German states,
 # i.e. counting how many gave their consent
+print()
 id_count = 0
 for k in info.id_state.keys():
     id_count += len(info.id_state[k])
-print(f'Using {id_count} WCA IDs.')
+print(f'>> Using {id_count} WCA IDs.')
 
 # interesting info to fill on each page, as the results are time-dependent
 now = datetime.datetime.now()
