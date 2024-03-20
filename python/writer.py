@@ -14,6 +14,9 @@ from operator import itemgetter
 # from GCA Discord
 import info
 
+# make formatting easier / human-readable
+import util
+
 # to record when the last update happened
 import datetime
 
@@ -252,7 +255,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                     th(sid[0])
                                     th(sid[2])
                                     th(a(sid[1], href=f'https://www.worldcubeassociation.org/persons/{sid[1]}'))
-                                    th(sid[3])
+                                    if es not in ['333fm', '333mbf', '333mbo']:
+                                        th(util.centiseconds_to_human(sid[3]))
+                                    else:
+                                        th(sid[3])
                                     th(sid[6])
                                     th(sid[5])
                                     th(sid[4])
@@ -278,7 +284,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                     th(aid[0])
                                     th(aid[2])
                                     th(a(aid[1], href=f'https://www.worldcubeassociation.org/persons/{aid[1]}'))
-                                    th(aid[3])
+                                    if es not in ['333fm', '333mbf', '333mbo']:
+                                        th(util.centiseconds_to_human(aid[3]))
+                                    else:
+                                        th(aid[3])
                                     th(aid[6])
                                     th(aid[5])
                                     th(aid[4])
@@ -319,7 +328,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                     with tr():
                                         th(sid[1])
                                         th(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'))
-                                        th(sid[2])
+                                        if es not in ['333fm', '333mbf', '333mbo']:
+                                            th(util.centiseconds_to_human(sid[2]))
+                                        else:
+                                            th(sid[2])
                                         th(sid[5])
                                         th(sid[4])
                                         th(sid[3])
@@ -328,7 +340,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                     with tr():
                                         th(sid[1], style='font-style:italic;color:#A4A4A4;')
                                         th(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'), style='font-style:italic;color:#A4A4A4;')
-                                        th(sid[2], style='font-style:italic;color:#A4A4A4;')
+                                        if es not in ['333fm', '333mbf', '333mbo']:
+                                            th(util.centiseconds_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;')
+                                        else:
+                                            th(sid[2], style='font-style:italic;color:#A4A4A4;')
                                         th(sid[5], style='font-style:italic;color:#A4A4A4;')
                                         th(sid[4], style='font-style:italic;color:#A4A4A4;')
                                         th(sid[3], style='font-style:italic;color:#A4A4A4;')
@@ -351,7 +366,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                     with tr():
                                         th(aid[1])
                                         th(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'))
-                                        th(aid[2])
+                                        if es not in ['333fm', '333mbf', '333mbo']:
+                                            th(util.centiseconds_to_human(aid[2]))
+                                        else:
+                                            th(aid[2])
                                         th(aid[5])
                                         th(aid[4])
                                         th(aid[3])
@@ -360,7 +378,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                     with tr():
                                         th(aid[1], style='font-style:italic;color:#A4A4A4;')
                                         th(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'), style='font-style:italic;color:#A4A4A4;')
-                                        th(aid[2], style='font-style:italic;color:#A4A4A4;')
+                                        if es not in ['333fm', '333mbf', '333mbo']:
+                                            th(util.centiseconds_to_human(aid[2]), style='font-style:italic;color:#A4A4A4;')
+                                        else:
+                                            th(aid[2], style='font-style:italic;color:#A4A4A4;')
                                         th(aid[5], style='font-style:italic;color:#A4A4A4;')
                                         th(aid[4], style='font-style:italic;color:#A4A4A4;')
                                         th(aid[3], style='font-style:italic;color:#A4A4A4;')
