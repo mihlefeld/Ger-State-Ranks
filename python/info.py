@@ -57,6 +57,7 @@ id_state = {
     'sh' : ['2014MATH02'],
     'th' : ['2016SCHO08'],
 }
+
 name_state = {
     'bw' : 'Baden-Württemberg',
     'bay' : 'Bayern',
@@ -75,3 +76,6 @@ name_state = {
     'sh' : 'Schleswig-Holstein',
     'th' : 'Thüringen',
 }
+
+no_avg = ['333mbf', '333mbo']
+old = ['333mbo', '333ft', 'magic', 'mmagic']
