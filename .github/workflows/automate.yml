@@ -6,33 +6,43 @@ on:
       - master
   schedule:
     - cron: '00 18 *  *  *'
+  workflow_dispatch:
 
 jobs:
   get-ranks-write-to-ui:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repo
+      - name: Checkout repo ⬇️
         uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
-      - name: setup python
+      - name: Setup python 🐍
         uses: actions/setup-python@v4
         with:
           python-version: '3.7'
 
-      - name: install python packages
+      - name: Install python packages 📦
         run: |
           python -m pip install --upgrade --no-cache-dir pip
           pip install -r requirements.txt
 
-      - name: execute python scripts
+      - name: Execute python scripts ▶️
         run: |
           cd python
           python writer.py --automate True
 
-      - name: commit files
+      # https://stackoverflow.com/a/74325815/22745629
+      # Don't fail later when nothing to commit
+      - name: Check changes via git ↔️
+        id: verify_diff
+        run: |
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+
+      # Only run if there is something to commit
+      - name: Commit changes ➕
+        if: steps.verify_diff.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -40,7 +50,9 @@ jobs:
           pwd
           git commit -m "[auto] new WCA German State Ranks" -a
 
-      - name: push changes
+      # Only run if there is something to push
+      - name: Push changes 🆙
+        if: steps.verify_diff.outputs.changed == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
