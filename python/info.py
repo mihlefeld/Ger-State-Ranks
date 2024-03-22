@@ -7,7 +7,8 @@ id_state = {
             '2013EKSI01',
             '2019HAAG01',
             '2023SCHN13',
-            '2010KILD02'],
+            '2010KILD02',
+            '2023ENGL01'],
     'bay' : ['2016ROLZ01',
              '2019BROW09',
              '2018DAMK01',
@@ -79,3 +80,18 @@ name_state = {
 
 no_avg = ['333mbf', '333mbo']
 old = ['333mbo', '333ft', 'magic', 'mmagic']
+
+month_map = {
+    '01' : 'January',
+    '02' : 'February',
+    '03' : 'March',
+    '04' : 'April',
+    '05' : 'May',
+    '06' : 'June',
+    '07' : 'July',
+    '08' : 'August',
+    '09' : 'September',
+    '10' : 'October',
+    '11' : 'November',
+    '12' : 'December',
+}

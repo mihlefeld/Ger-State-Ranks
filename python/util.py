@@ -47,7 +47,6 @@ def mbf_to_human(result):
     mis = int(str(result)[-2:])
     solved = diff + mis
     attempted = solved + mis
-    print(solved, attempted, t_in_sec)
     
     m, s = divmod(t_in_sec, 60)
     h, m = divmod(m, 60)

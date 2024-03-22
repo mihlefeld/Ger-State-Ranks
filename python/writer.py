@@ -49,6 +49,22 @@ local = args.local
 automate = args.automate
 
 
+# unofficial api, returns version of data
+if local:
+    with open('../local/version.json') as file:
+        # the file is understood as json
+        json_data_v = json.load(file)
+else:
+    with libreq.urlopen('https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/version.json') as file:
+        # the file is understood as json
+        json_data_v = json.load(file)
+        if not automate:
+            with open('../local/version.json', 'w') as f:
+                json.dump(json_data_v, f)
+
+version_y = json_data_v['export_date'][:4]
+version_m = info.month_map[json_data_v['export_date'][5:7]]
+version_d = json_data_v['export_date'][8:10]
 
 # unofficial api, returns events
 if local:
@@ -190,8 +206,29 @@ for k in info.id_state.keys():
 print(f'>> Using {id_count} WCA IDs.')
 
 # interesting info to fill on each page, as the results are time-dependent
-now = datetime.datetime.now()
-updated = now.strftime("%Y-%m-%d")
+#now = datetime.datetime.now()
+updated = f'{version_m} {version_d}, {version_y}'
+
+def generate_readme():
+    md_str = f'''# WCA German State Ranks
+[![WCA German State Ranks Automation](https://github.com/AnnikaStein/WCA-German-State-Ranks/actions/workflows/automate.yml/badge.svg)](https://github.com/AnnikaStein/WCA-German-State-Ranks/actions/workflows/automate.yml)
+[![pages-build-deployment](https://github.com/AnnikaStein/WCA-German-State-Ranks/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/AnnikaStein/WCA-German-State-Ranks/actions/workflows/pages/pages-build-deployment)
+
+Displaying the PRs of people who have given *explicit consent* (opt-in) to appear in German WCA state rankings. Federal state data taken from the GCA Discord Server (reaction roles), PRs taken from the WCA database via the [unofficial API](https://github.com/robiningelbrecht/wca-rest-api).
+
+## How to appear in these rankings?
+- Join the GCA Discord Server and read + understand the rules.
+- Append your WCA ID to your username (example: Nickname | 2024ABCD42)
+- Click one of the 16 federal state reaction roles.
+
+## Data statement
+> This information is based on competition results owned and maintained by the
+> World Cube Assocation, published at https://worldcubeassociation.org/results
+> as of {updated}.
+'''
+    
+    with open('../README.md', 'w') as f:
+        f.write(md_str)
 
 # called multiple times, for different purposes, however with some equal parts across pages
 def generate_html(variant = 'by-state', choice = 'bw'):
@@ -443,7 +480,10 @@ generate_html(variant = 'overview', choice = 'all')
 for st in state_r.keys():
     print(f'>> Writing {st} ranks to UI.')
     generate_html(variant = 'by-state', choice = st)
-    
+
+print()
+print('>> Writing version to README.md')
+generate_readme()
 print()
 print('#'*8)
 print()
