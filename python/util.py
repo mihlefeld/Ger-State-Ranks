@@ -28,7 +28,7 @@ def mbo_to_human(result):
     
     m, s = divmod(t_in_sec, 60)
     h, m = divmod(m, 60)
-    if s < 10 and m > 0:
+    if s < 10 and (m > 0 or h > 0):
         s = f"0{str(s)}"
     if m < 10 and h > 0:
         m = f"0{str(m)}"
@@ -50,7 +50,7 @@ def mbf_to_human(result):
     
     m, s = divmod(t_in_sec, 60)
     h, m = divmod(m, 60)
-    if s < 10 and m > 0:
+    if s < 10 and (m > 0 or h > 0):
         s = f"0{str(s)}"
     if m < 10 and h > 0:
         m = f"0{str(m)}"
