@@ -141,7 +141,7 @@ for st,dicts in zip(state_r.keys(),state_r.values()):
         if debug:
             print(sd)
         state_r[st]['average'][s] = sd
-        
+
 
 # now, for the combination we start over again with an empty dict
 overview = {'single' : {e : [] for e in e_list}, 'average' : {e : [] for e in e_list if e not in info.no_avg}}
@@ -158,44 +158,67 @@ for e in e_list:
         if len(state_r[st]['single'][e]) > 0:
             # ToDo: ties *within* one federal state are NOT yet modeled,
             # only the first one (alphabetically), as it's very very uncommon (333fm ?)
-            this_states_best_list = state_r[st]['single'][e][0]
+            #this_states_best_list = state_r[st]['single'][e][0]
+            # modeling ties within a federal state
+            this_states_best_value = state_r[st]['single'][e][0][2]
+            this_states_best_list = [v for v in state_r[st]['single'][e] if v[2] == this_states_best_value]
+            
             if debug:
                 print(this_states_best_list)
             # checking if it's the first state with a result here
             if len(overview['single'][e]) == 0:
                 # first result for this evt/single -> collect!
-                overview['single'][e] = [[st] + this_states_best_list]
+                overview['single'][e] = []
+                for v in this_states_best_list:
+                    overview['single'][e].append([st] + v)
+                #overview['single'][e] = [[st] + this_states_best_list]
             else:
                 # could be interesting, check if better or equal than already existing ones
-                if this_states_best_list[2] <= overview['single'][e][0][3]:
+                if this_states_best_list[0][2] <= overview['single'][e][0][3]:
                     # better -> collect as the only state
-                    if this_states_best_list[2] < overview['single'][e][0][3]:
+                    if this_states_best_list[0][2] < overview['single'][e][0][3]:
                         # currently best -> write state + who achieved that
-                        overview['single'][e] = [[st] + this_states_best_list]
+                        overview['single'][e] = []
+                        for v in this_states_best_list:
+                            overview['single'][e].append([st] + v)
+                        #overview['single'][e] = [[st] + this_states_best_list]
                     # just equal -> append
                     else:
                         # currently tied
-                        overview['single'][e].append([st] + this_states_best_list)
-    
+                        for v in this_states_best_list:
+                            overview['single'][e].append([st] + v)
+                        #overview['single'][e].append([st] + this_states_best_list)
+
         # same stuff again, just for averages
         if e not in info.no_avg:
             if debug:
                 print('>> Doing Averages')
             if len(state_r[st]['average'][e]) > 0:
-                this_states_best_list = state_r[st]['average'][e][0]
+                #this_states_best_list = state_r[st]['average'][e][0]
+                # modeling ties within a federal state
+                this_states_best_value = state_r[st]['average'][e][0][2]
+                this_states_best_list = [v for v in state_r[st]['average'][e] if v[2] == this_states_best_value]
                 if debug:
                     print(this_states_best_list)
                 if len(overview['average'][e]) == 0:
-                    overview['average'][e] = [[st] + this_states_best_list]
+                    overview['average'][e] = []
+                    for v in this_states_best_list:
+                        overview['average'][e].append([st] + v)
+                    #overview['average'][e] = [[st] + this_states_best_list]
                 else:
-                    if this_states_best_list[2] <= overview['average'][e][0][3]:
-                        if this_states_best_list[2] < overview['average'][e][0][3]:
+                    if this_states_best_list[0][2] <= overview['average'][e][0][3]:
+                        if this_states_best_list[0][2] < overview['average'][e][0][3]:
                             # currently best
-                            overview['average'][e] = [[st] + this_states_best_list]
+                            overview['average'][e] = []
+                            for v in this_states_best_list:
+                                overview['average'][e].append([st] + v)
+                            #overview['average'][e] = [[st] + this_states_best_list]
                         else:
                             # currently tied
-                            overview['average'][e].append([st] + this_states_best_list)
-                        
+                            for v in this_states_best_list:
+                                overview['average'][e].append([st] + v)
+                            #overview['average'][e].append([st] + this_states_best_list)
+
 
 # to show that we are only using a subset of all available results in German states,
 # i.e. counting how many gave their consent
@@ -226,7 +249,7 @@ Displaying the PRs of people who have given *explicit consent* (opt-in) to appea
 > World Cube Assocation, published at https://worldcubeassociation.org/results
 > as of {updated}.
 '''
-    
+
     with open('../README.md', 'w') as f:
         f.write(md_str)
 
@@ -245,7 +268,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
     if variant == 'index':
         title_app = ''
         prefix = '../'
-        
+
     # start the DOM
     doc = dominate.document(title='WCA German State Ranks'+title_app)
 
@@ -258,10 +281,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
 
     with doc:
         # body ('what the user sees')
-        
+
         # how to write comments in the dominate library
         comment(' Content container ')
-        
+
         # individual content per type, here from all states combined
         if variant == 'overview':
             with div():
@@ -334,7 +357,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                     th(aid[5])
                                     th(aid[4])
                                     th(aid[7])
-        
+
         # main page
         elif variant == 'index':
             with div():
@@ -344,8 +367,8 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                 br()
                 a('Overview', href=f'pages/overview_all.html')
                 for st in state_r.keys():
-                    a(info.name_state[st], href=f'pages/by-state_{st}.html')         
-        
+                    a(info.name_state[st], href=f'pages/by-state_{st}.html')
+
         # individual states
         else:
             with div():
@@ -440,10 +463,11 @@ def generate_html(variant = 'by-state', choice = 'bw'):
         with footer():
             attr(style='text-align: center;height:10rem;clear:both;display:block;')
             a('© Annika Stein, 2024.',
-              href='https://cuboss.com/affiliate/?affiliate=hugacuba&r=hugacuba',
+              href='https://annikastein.github.io/',
               target='_blank')
+            br()
+            text(f'This information is based on competition results owned and maintained by the World Cube Assocation, published at https://worldcubeassociation.org/results as of {updated}.')  
         #script(src='js/script-Copy1.js')
-        script(data_id='101446349', _async=True, src='//static.getclicky.com/js')
 
     if debug:
         print()
@@ -460,8 +484,8 @@ def generate_html(variant = 'by-state', choice = 'bw'):
     else:
         with open(f"{prefix}{variant}_{choice}.html", "w") as text_file:
             print(doc, file=text_file)
-        
-        
+
+
 # now we know the relevant info to steer the UI
 print()
 print('#'*8)
