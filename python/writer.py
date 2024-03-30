@@ -257,7 +257,7 @@ Displaying the PRs of people who have given *explicit consent* (opt-in) to appea
 def generate_html(variant = 'by-state', choice = 'bw'):
     # three types of pages to generate, each coming with different setups here
     if variant == 'by-state':
-        title_app = f' - {choice}'
+        title_app = f' - {info.name_state[choice]}'
         r = state_r[choice]
         s_dict = r['single']
         a_dict = r['average']
@@ -295,7 +295,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                 # give class attribute, don't use python reserved keywords
                 attr(cls = 'container')
                 # this would also be a good place to improve such items with id or class attributes for easy styling
-                h1('WCA German State Ranks'+title_app)
+                h2('WCA German State Ranks'+title_app)
                 for es, s in zip(overview['single'].keys(),overview['single'].values()):
                     if debug:
                         print(es, s)
@@ -369,7 +369,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
         elif variant == 'index':
             with div():
                 attr(cls = 'container')
-                h1('WCA German State Ranks'+title_app)
+                h2('WCA German State Ranks'+title_app)
                 br()
                 a('Overview', href=f'pages/overview_all.html')
                 for st in state_r.keys():
@@ -379,100 +379,116 @@ def generate_html(variant = 'by-state', choice = 'bw'):
         else:
             with div():
                 attr(cls = 'container')
-                h1('WCA German State Ranks'+title_app)
+                h2('WCA German State Ranks'+title_app)
+                with label():
+                    text('Show Non-DE')
+                with label():
+                    attr(cls = 'switch')
+                    input_(type='checkbox', checked = True, value='nonDE', id='nonDEswitch')
+                    span(cls = 'slider round')
+                br()
                 for es, s in zip(s_dict.keys(),s_dict.values()):
-                    text(es + ' (Single)')
                     with div():
-                        attr(style = 'overflow-x:auto;')
-                        with table():
-                            with thead():
-                                with tr():
-                                    th('Name', style = 'text-align: left;')
-                                    th('WCA Id', style = 'text-align: center;')
-                                    th('Value', style = 'text-align: right;')
-                                    th('WR', style = 'text-align: right;')
-                                    th('CR', style = 'text-align: right;')
-                                    th('NR', style = 'text-align: right;')
-                                    th('Country', style = 'text-align: center;')
-                            with tbody():
-                                for sid in s:
-                                    if sid[6] == 'DE':
-                                        with tr():
-                                            td(sid[1], style = 'text-align: left;')
-                                            td(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'), style='text-align: center;')
-                                            if es not in ['333fm', '333mbf', '333mbo']:
-                                                td(util.centiseconds_to_human(sid[2]), style='text-align: right;')
-                                            elif es == '333mbf':
-                                                td(util.mbf_to_human(sid[2]), style='text-align: right;')
-                                            elif es == '333mbo':
-                                                td(util.mbo_to_human(sid[2]), style='text-align: right;')
-                                            else:
-                                                td(sid[2], style='text-align: right;')
-                                            td(sid[5], style='text-align: right;')
-                                            td(sid[4], style='text-align: right;')
-                                            td(sid[3], style='text-align: right;')
-                                            td(sid[6], style='text-align: center;')
-                                    else:
-                                        with tr():
-                                            td(sid[1], style='font-style:italic;color:#A4A4A4;text-align: left;')
-                                            td(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'), style='font-style:italic;color:#A4A4A4;text-align: center;')
-                                            if es not in ['333fm', '333mbf', '333mbo']:
-                                                td(util.centiseconds_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            elif es == '333mbf':
-                                                td(util.mbf_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            elif es == '333mbo':
-                                                td(util.mbo_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            else:
-                                                td(sid[2], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            td(sid[5], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            td(sid[4], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            td(sid[3], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            td(sid[6], style='font-style:italic;color:#A4A4A4;text-align: center;')
+                        attr(cls='evt sin')
+                        text(es + ' (Single)')
+                        with div():
+                            attr(style = 'overflow-x:auto;')
+                            with table():
+                                with thead():
+                                    with tr():
+                                        th('Name', style = 'text-align: left;')
+                                        th('WCA Id', style = 'text-align: center;')
+                                        th('Value', style = 'text-align: right;')
+                                        th('WR', style = 'text-align: right;')
+                                        th('CR', style = 'text-align: right;')
+                                        th('NR', style = 'text-align: right;')
+                                        th('Country', style = 'text-align: center;')
+                                with tbody():
+                                    for sid in s:
+                                        if sid[6] == 'DE':
+                                            with tr():
+                                                attr(cls='bgColRow')
+                                                td(sid[1], style = 'text-align: left;')
+                                                td(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'), style='text-align: center;')
+                                                if es not in ['333fm', '333mbf', '333mbo']:
+                                                    td(util.centiseconds_to_human(sid[2]), style='text-align: right;')
+                                                elif es == '333mbf':
+                                                    td(util.mbf_to_human(sid[2]), style='text-align: right;')
+                                                elif es == '333mbo':
+                                                    td(util.mbo_to_human(sid[2]), style='text-align: right;')
+                                                else:
+                                                    td(sid[2], style='text-align: right;')
+                                                td(sid[5], style='text-align: right;')
+                                                td(sid[4], style='text-align: right;')
+                                                td(sid[3], style='text-align: right;')
+                                                td(sid[6], style='text-align: center;')
+                                        else:
+                                            with tr():
+                                                attr(cls='bgColRow nonDE')
+                                                td(sid[1], style='font-style:italic;color:#A4A4A4;text-align: left;')
+                                                td(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'), style='font-style:italic;color:#A4A4A4;text-align: center;')
+                                                if es not in ['333fm', '333mbf', '333mbo']:
+                                                    td(util.centiseconds_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                elif es == '333mbf':
+                                                    td(util.mbf_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                elif es == '333mbo':
+                                                    td(util.mbo_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                else:
+                                                    td(sid[2], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(sid[5], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(sid[4], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(sid[3], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(sid[6], style='font-style:italic;color:#A4A4A4;text-align: center;')
                 for ea, aa in zip(a_dict.keys(),a_dict.values()):
-                    text(ea + ' (Average)')
                     with div():
-                        attr(style = 'overflow-x:auto;')
-                        with table():
-                            with thead():
-                                with tr():
-                                    th('Name', style = 'text-align: left;')
-                                    th('WCA Id', style = 'text-align: center;')
-                                    th('Value', style = 'text-align: right;')
-                                    th('WR', style = 'text-align: right;')
-                                    th('CR', style = 'text-align: right;')
-                                    th('NR', style = 'text-align: right;')
-                                    th('Country', style = 'text-align: center;')
-                            with tbody():
-                                for aid in aa:
-                                    if aid[6] == 'DE':
-                                        with tr():
-                                            td(aid[1], style = 'text-align: left;')
-                                            td(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'), style='text-align: center;')
-                                            if es not in ['333fm']:
-                                                td(util.centiseconds_to_human(aid[2]), style='text-align: right;')
-                                            else:
-                                                td(aid[2], style='text-align: right;')
-                                            td(aid[5], style='text-align: right;')
-                                            td(aid[4], style='text-align: right;')
-                                            td(aid[3], style='text-align: right;')
-                                            td(aid[6], style='text-align: center;')
-                                    else:
-                                        with tr():
-                                            td(aid[1], style='font-style:italic;color:#A4A4A4;text-align: left;')
-                                            td(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'), style='font-style:italic;color:#A4A4A4;text-align: center;')
-                                            if es not in ['333fm']:
-                                                td(util.centiseconds_to_human(aid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            else:
-                                                td(aid[2], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            td(aid[5], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            td(aid[4], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            td(aid[3], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                            td(aid[6], style='font-style:italic;color:#A4A4A4;text-align: center;')
+                        attr(cls='evt avg')
+                        text(ea + ' (Average)')
+                        with div():
+                            attr(style = 'overflow-x:auto;')
+                            with table():
+                                with thead():
+                                    with tr():
+                                        th('Name', style = 'text-align: left;')
+                                        th('WCA Id', style = 'text-align: center;')
+                                        th('Value', style = 'text-align: right;')
+                                        th('WR', style = 'text-align: right;')
+                                        th('CR', style = 'text-align: right;')
+                                        th('NR', style = 'text-align: right;')
+                                        th('Country', style = 'text-align: center;')
+                                with tbody():
+                                    for aid in aa:
+                                        if aid[6] == 'DE':
+                                            with tr():
+                                                attr(cls='bgColRow')
+                                                td(aid[1], style = 'text-align: left;')
+                                                td(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'), style='text-align: center;')
+                                                if es not in ['333fm']:
+                                                    td(util.centiseconds_to_human(aid[2]), style='text-align: right;')
+                                                else:
+                                                    td(aid[2], style='text-align: right;')
+                                                td(aid[5], style='text-align: right;')
+                                                td(aid[4], style='text-align: right;')
+                                                td(aid[3], style='text-align: right;')
+                                                td(aid[6], style='text-align: center;')
+                                        else:
+                                            with tr():
+                                                attr(cls='bgColRow nonDE')
+                                                td(aid[1], style='font-style:italic;color:#A4A4A4;text-align: left;')
+                                                td(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'), style='font-style:italic;color:#A4A4A4;text-align: center;')
+                                                if es not in ['333fm']:
+                                                    td(util.centiseconds_to_human(aid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                else:
+                                                    td(aid[2], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(aid[5], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(aid[4], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(aid[3], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(aid[6], style='font-style:italic;color:#A4A4A4;text-align: center;')
 
         with div():
             attr(cls = 'container')
             with footer():
                 attr(style='text-align: center;height:10rem;clear:both;display:block;')
+                br()
                 text(f'From {id_count} WCA IDs.')
                 br()
                 text(f'This information is based on competition results owned and maintained by the World Cube Assocation, published at https://worldcubeassociation.org/results as of {updated}.')
@@ -480,7 +496,11 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                 a('© Annika Stein, 2024.',
                   href='https://annikastein.github.io/',
                   target='_blank')
-        #script(src='js/script-Copy1.js')
+
+        if variant == 'index':
+            script(src='./js/script.js')
+        else:
+            script(src='../js/script.js')
 
     if debug:
         print()
