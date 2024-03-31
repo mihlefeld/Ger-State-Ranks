@@ -1,7 +1,7 @@
 const no_avg = ['333mbf', '333mbo'];
 
 function recalcAlternating() {
-    var evts = document.getElementsByClassName('evt');
+    var evts = document.getElementsByClassName('evt-active');
     for (var a = 0, leng = evts.length; a < leng; a++) {
         var visi_count = 0;
         var bgColRows = evts[a].getElementsByClassName('bgColRow');
@@ -60,4 +60,6 @@ function showEvt(ev = '333') {
     }
     const makeActiveBtn = document.getElementById('btn-'+ev);
     makeActiveBtn.classList.add("btn-active");
+    
+    recalcAlternating();
 }
