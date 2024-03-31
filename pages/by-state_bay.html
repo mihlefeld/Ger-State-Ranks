@@ -13,12 +13,79 @@
     <!-- Content container -->
     <div class="container">
       <h2>WCA German State Ranks - Bayern</h2>
-      <label>Show Non-DE</label>
       <label class="switch">
+        <span>Show Non-DE</span>
         <input checked="checked" id="nonDEswitch" type="checkbox" value="nonDE">
         <span class="slider round"></span>
       </label><br>
-      <div class="evt sin">222 (Single)
+      <div style="overflow-x:auto;z-index: -1;">
+        <div class="btn-con">
+          <button class="btn" id="btn-222" onclick="showEvt(evt='222')">
+            <img class="ebdSVG" src="../assets/event-svg/222.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-333bf" onclick="showEvt(evt='333bf')">
+            <img class="ebdSVG" src="../assets/event-svg/333bf.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn btn-active" id="btn-333" onclick="showEvt(evt='333')">
+            <img class="ebdSVG" src="../assets/event-svg/333.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-333fm" onclick="showEvt(evt='333fm')">
+            <img class="ebdSVG" src="../assets/event-svg/333fm.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-333mbf" onclick="showEvt(evt='333mbf')">
+            <img class="ebdSVG" src="../assets/event-svg/333mbf.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-333mbo" onclick="showEvt(evt='333mbo')">
+            <img class="ebdSVG" src="../assets/event-svg/333mbo.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-333oh" onclick="showEvt(evt='333oh')">
+            <img class="ebdSVG" src="../assets/event-svg/333oh.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-333ft" onclick="showEvt(evt='333ft')">
+            <img class="ebdSVG" src="../assets/event-svg/333ft.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-444bf" onclick="showEvt(evt='444bf')">
+            <img class="ebdSVG" src="../assets/event-svg/444bf.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-444" onclick="showEvt(evt='444')">
+            <img class="ebdSVG" src="../assets/event-svg/444.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-555bf" onclick="showEvt(evt='555bf')">
+            <img class="ebdSVG" src="../assets/event-svg/555bf.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-555" onclick="showEvt(evt='555')">
+            <img class="ebdSVG" src="../assets/event-svg/555.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-666" onclick="showEvt(evt='666')">
+            <img class="ebdSVG" src="../assets/event-svg/666.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-777" onclick="showEvt(evt='777')">
+            <img class="ebdSVG" src="../assets/event-svg/777.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-clock" onclick="showEvt(evt='clock')">
+            <img class="ebdSVG" src="../assets/event-svg/clock.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-magic" onclick="showEvt(evt='magic')">
+            <img class="ebdSVG" src="../assets/event-svg/magic.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-mmagic" onclick="showEvt(evt='mmagic')">
+            <img class="ebdSVG" src="../assets/event-svg/mmagic.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-minx" onclick="showEvt(evt='minx')">
+            <img class="ebdSVG" src="../assets/event-svg/minx.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-pyram" onclick="showEvt(evt='pyram')">
+            <img class="ebdSVG" src="../assets/event-svg/pyram.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-skewb" onclick="showEvt(evt='skewb')">
+            <img class="ebdSVG" src="../assets/event-svg/skewb.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+          <button class="btn" id="btn-sq1" onclick="showEvt(evt='sq1')">
+            <img class="ebdSVG" src="../assets/event-svg/sq1.svg" style="height: 1.6rem; width: 1.6rem;">
+          </button>
+        </div>
+      </div><br>
+      <div class="evt-hidden sin-222">222 (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -158,7 +225,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">333bf (Single)
+      <div class="evt-hidden sin-333bf">333bf (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -265,7 +332,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">333 (Single)
+      <div class="evt-active sin-333">333 (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -405,7 +472,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">333fm (Single)
+      <div class="evt-hidden sin-333fm">333fm (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -534,7 +601,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">333mbf (Single)
+      <div class="evt-hidden sin-333mbf">333mbf (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -597,7 +664,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">333mbo (Single)
+      <div class="evt-hidden sin-333mbo">333mbo (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -615,7 +682,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">333oh (Single)
+      <div class="evt-hidden sin-333oh">333oh (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -755,7 +822,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">333ft (Single)
+      <div class="evt-hidden sin-333ft">333ft (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -807,7 +874,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">444bf (Single)
+      <div class="evt-hidden sin-444bf">444bf (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -848,7 +915,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">444 (Single)
+      <div class="evt-hidden sin-444">444 (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -988,7 +1055,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">555bf (Single)
+      <div class="evt-hidden sin-555bf">555bf (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1018,7 +1085,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">555 (Single)
+      <div class="evt-hidden sin-555">555 (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1158,7 +1225,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">666 (Single)
+      <div class="evt-hidden sin-666">666 (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1298,7 +1365,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">777 (Single)
+      <div class="evt-hidden sin-777">777 (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1438,7 +1505,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">clock (Single)
+      <div class="evt-hidden sin-clock">clock (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1567,7 +1634,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">magic (Single)
+      <div class="evt-hidden sin-magic">magic (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1585,7 +1652,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">mmagic (Single)
+      <div class="evt-hidden sin-mmagic">mmagic (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1603,7 +1670,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">minx (Single)
+      <div class="evt-hidden sin-minx">minx (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1732,7 +1799,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">pyram (Single)
+      <div class="evt-hidden sin-pyram">pyram (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1872,7 +1939,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">skewb (Single)
+      <div class="evt-hidden sin-skewb">skewb (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2012,7 +2079,7 @@
           </table>
         </div>
       </div>
-      <div class="evt sin">sq1 (Single)
+      <div class="evt-hidden sin-sq1">sq1 (Single)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2141,7 +2208,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">222 (Average)
+      <div class="evt-hidden avg-222">222 (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2281,7 +2348,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">333bf (Average)
+      <div class="evt-hidden avg-333bf">333bf (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2355,7 +2422,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">333 (Average)
+      <div class="evt-active avg-333">333 (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2495,7 +2562,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">333fm (Average)
+      <div class="evt-hidden avg-333fm">333fm (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2569,7 +2636,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">333oh (Average)
+      <div class="evt-hidden avg-333oh">333oh (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2709,7 +2776,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">333ft (Average)
+      <div class="evt-hidden avg-333ft">333ft (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2750,7 +2817,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">444bf (Average)
+      <div class="evt-hidden avg-444bf">444bf (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2780,7 +2847,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">444 (Average)
+      <div class="evt-hidden avg-444">444 (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2920,7 +2987,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">555bf (Average)
+      <div class="evt-hidden avg-555bf">555bf (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -2950,7 +3017,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">555 (Average)
+      <div class="evt-hidden avg-555">555 (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3090,7 +3157,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">666 (Average)
+      <div class="evt-hidden avg-666">666 (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3219,7 +3286,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">777 (Average)
+      <div class="evt-hidden avg-777">777 (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3348,7 +3415,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">clock (Average)
+      <div class="evt-hidden avg-clock">clock (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3477,7 +3544,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">magic (Average)
+      <div class="evt-hidden avg-magic">magic (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3495,7 +3562,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">mmagic (Average)
+      <div class="evt-hidden avg-mmagic">mmagic (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3513,7 +3580,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">minx (Average)
+      <div class="evt-hidden avg-minx">minx (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3642,7 +3709,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">pyram (Average)
+      <div class="evt-hidden avg-pyram">pyram (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3782,7 +3849,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">skewb (Average)
+      <div class="evt-hidden avg-skewb">skewb (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -3922,7 +3989,7 @@
           </table>
         </div>
       </div>
-      <div class="evt avg">sq1 (Average)
+      <div class="evt-hidden avg-sq1">sq1 (Average)
         <div style="overflow-x:auto;">
           <table>
             <thead>
