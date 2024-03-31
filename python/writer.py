@@ -98,9 +98,9 @@ for s in info.id_state.keys():
                 if not automate:
                     with open(f'../local/persons/{wca_id}.json', 'w') as f:
                         json.dump(json_data_p, f)
-        # ToDo: check for country == / != de
+
         # collect single / average results per person for each event they have a result in
-        # for now, WCA ID, full name, best result (numerical value as in DB, not yet human-readable) and NR, CR, WR
+        # WCA ID, full name, best result (numerical value as in DB, not yet human-readable) and NR, CR, WR, country
         for e in json_data_p['rank']['singles']:
             state_r[s]['single'][e['eventId']].append([json_data_p['id'],
                                                        json_data_p['name'],
@@ -156,9 +156,6 @@ for e in e_list:
             print('>> Doing Singles')
         # checking if something exists for that state
         if len(state_r[st]['single'][e]) > 0:
-            # ToDo: ties *within* one federal state are NOT yet modeled,
-            # only the first one (alphabetically), as it's very very uncommon (333fm ?)
-            #this_states_best_list = state_r[st]['single'][e][0]
             # modeling ties within a federal state
             this_states_best_value = state_r[st]['single'][e][0][2]
             this_states_best_list = [v for v in state_r[st]['single'][e] if v[2] == this_states_best_value]
@@ -171,7 +168,6 @@ for e in e_list:
                 overview['single'][e] = []
                 for v in this_states_best_list:
                     overview['single'][e].append([st] + v)
-                #overview['single'][e] = [[st] + this_states_best_list]
             else:
                 # could be interesting, check if better or equal than already existing ones
                 if this_states_best_list[0][2] <= overview['single'][e][0][3]:
@@ -181,20 +177,17 @@ for e in e_list:
                         overview['single'][e] = []
                         for v in this_states_best_list:
                             overview['single'][e].append([st] + v)
-                        #overview['single'][e] = [[st] + this_states_best_list]
                     # just equal -> append
                     else:
                         # currently tied
                         for v in this_states_best_list:
                             overview['single'][e].append([st] + v)
-                        #overview['single'][e].append([st] + this_states_best_list)
 
         # same stuff again, just for averages
         if e not in info.no_avg:
             if debug:
                 print('>> Doing Averages')
             if len(state_r[st]['average'][e]) > 0:
-                #this_states_best_list = state_r[st]['average'][e][0]
                 # modeling ties within a federal state
                 this_states_best_value = state_r[st]['average'][e][0][2]
                 this_states_best_list = [v for v in state_r[st]['average'][e] if v[2] == this_states_best_value]
@@ -204,7 +197,6 @@ for e in e_list:
                     overview['average'][e] = []
                     for v in this_states_best_list:
                         overview['average'][e].append([st] + v)
-                    #overview['average'][e] = [[st] + this_states_best_list]
                 else:
                     if this_states_best_list[0][2] <= overview['average'][e][0][3]:
                         if this_states_best_list[0][2] < overview['average'][e][0][3]:
@@ -212,12 +204,10 @@ for e in e_list:
                             overview['average'][e] = []
                             for v in this_states_best_list:
                                 overview['average'][e].append([st] + v)
-                            #overview['average'][e] = [[st] + this_states_best_list]
                         else:
                             # currently tied
                             for v in this_states_best_list:
                                 overview['average'][e].append([st] + v)
-                            #overview['average'][e].append([st] + this_states_best_list)
 
 
 # to show that we are only using a subset of all available results in German states,
@@ -381,15 +371,29 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                 attr(cls = 'container')
                 h2('WCA German State Ranks'+title_app)
                 with label():
-                    text('Show Non-DE')
-                with label():
                     attr(cls = 'switch')
+                    span('Show Non-DE')
                     input_(type='checkbox', checked = True, value='nonDE', id='nonDEswitch')
                     span(cls = 'slider round')
                 br()
+                with div():
+                    attr(style = 'overflow-x:auto;z-index: -1;')
+                    with div():
+                        attr(cls='btn-con')
+                        for ev in e_list:
+                            if ev == '333':
+                                with button(cls='btn btn-active', onclick=f'showEvt(evt=\'{ev}\')', id=f'btn-{ev}'):
+                                    img(src=f'../assets/event-svg/{ev}.svg', cls='ebdSVG', style='height: 1.6rem; width: 1.6rem;')
+                            else:
+                                with button(cls='btn', onclick=f'showEvt(evt=\'{ev}\')', id=f'btn-{ev}'):
+                                    img(src=f'../assets/event-svg/{ev}.svg', cls='ebdSVG', style='height: 1.6rem; width: 1.6rem;')
+                br()
                 for es, s in zip(s_dict.keys(),s_dict.values()):
                     with div():
-                        attr(cls='evt sin')
+                        if es == '333':
+                            attr(cls=f'evt-active sin-{es}')
+                        else:
+                            attr(cls=f'evt-hidden sin-{es}')
                         text(es + ' (Single)')
                         with div():
                             attr(style = 'overflow-x:auto;')
@@ -441,7 +445,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                                 td(sid[6], style='font-style:italic;color:#A4A4A4;text-align: center;')
                 for ea, aa in zip(a_dict.keys(),a_dict.values()):
                     with div():
-                        attr(cls='evt avg')
+                        if ea == '333':
+                            attr(cls=f'evt-active avg-{ea}')
+                        else:
+                            attr(cls=f'evt-hidden avg-{ea}')
                         text(ea + ' (Average)')
                         with div():
                             attr(style = 'overflow-x:auto;')

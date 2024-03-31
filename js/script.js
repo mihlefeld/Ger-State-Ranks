@@ -1,3 +1,5 @@
+const no_avg = ['333mbf', '333mbo'];
+
 function recalcAlternating() {
     var evts = document.getElementsByClassName('evt');
     for (var a = 0, leng = evts.length; a < leng; a++) {
@@ -17,7 +19,6 @@ function recalcAlternating() {
     }
 }
 
-
 function toggle (e) {
     var self = e.target,
         toggleClass = '.' + self.value,
@@ -28,5 +29,35 @@ function toggle (e) {
     recalcAlternating();
 }
 
-var nonDEswitch = document.getElementById('nonDEswitch');
-nonDEswitch.addEventListener('change', toggle);
+var isNotCountryTogglePage = ! document.getElementById('nonDEswitch');
+if (isNotCountryTogglePage == false) {
+    var nonDEswitch = document.getElementById('nonDEswitch');
+    nonDEswitch.addEventListener('change', toggle);
+}
+
+function showEvt(ev = '333') {
+    // remove active, add hidden
+    const wasActive = document.querySelectorAll('.evt-active');
+    for (var i = 0, len = wasActive.length; i < len; i++) {
+        wasActive[i].classList.remove("evt-active");
+        wasActive[i].classList.add("evt-hidden");
+    }
+    // for the chosen evt, the other way around
+    var makeActiveSin = document.getElementsByClassName('sin-'+ev);
+    if (!no_avg.includes(ev)) {
+        var makeActiveAvg = document.getElementsByClassName('avg-'+ev);
+    }
+    makeActiveSin[0].classList.remove("evt-hidden");
+    makeActiveSin[0].classList.add("evt-active");
+    if (!no_avg.includes(ev)) {
+        makeActiveAvg[0].classList.remove("evt-hidden");
+        makeActiveAvg[0].classList.add("evt-active");
+    }
+    
+    const wasActiveBtn = document.querySelectorAll('.btn-active');
+    for (var i = 0, len = wasActiveBtn.length; i < len; i++) {
+        wasActiveBtn[i].classList.remove("btn-active");
+    }
+    const makeActiveBtn = document.getElementById('btn-'+ev);
+    makeActiveBtn.classList.add("btn-active");
+}

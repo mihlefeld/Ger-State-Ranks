@@ -29,17 +29,58 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-/*border-radius: 25px;*/
+.btn-con {
+  margin-top: 0.5rem;
+  width: 57.5rem;
+  z-index: -1;
+}
 
+.btn {
+  border-radius: 0.1rem;
+  background-color: #cce6ff;
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  height: 2.4rem;
+  width: 2.4rem;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: #00cc66;
+}
+
+.btn-active {
+  background-color: #00cc66;
+}
+
+.ebdSVG {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.evt-active {
+  display: block;
+}
+
+.evt-hidden {
+  display: none;
+}
 
 .switch {
   position: relative;
   display: inline-block;
-  width: 2.3rem;
+  width: 9.8rem;
   height: 1.5rem;
 }
 
-.switch input {
+.switch input { 
   opacity: 0;
   width: 0;
   height: 0;
@@ -49,7 +90,7 @@ tr:nth-child(even) {
   position: absolute;
   cursor: pointer;
   top: 0;
-  left: 0;
+  left: 7.5rem;
   right: 0;
   bottom: 0;
   background-color: #ccc;
