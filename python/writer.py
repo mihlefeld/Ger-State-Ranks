@@ -159,7 +159,7 @@ for e in e_list:
             # modeling ties within a federal state
             this_states_best_value = state_r[st]['single'][e][0][2]
             this_states_best_list = [v for v in state_r[st]['single'][e] if v[2] == this_states_best_value]
-            
+
             if debug:
                 print(this_states_best_list)
             # checking if it's the first state with a result here
@@ -286,28 +286,59 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                 attr(cls = 'container')
                 # this would also be a good place to improve such items with id or class attributes for easy styling
                 h2('WCA German State Ranks'+title_app)
-                for es, s in zip(overview['single'].keys(),overview['single'].values()):
-                    if debug:
-                        print(es, s)
-                    text(es + ' (Single)')
-                    with div():
-                        attr(style = 'overflow-x:auto;')
-                        with table():
-                            with thead():
-                                with tr():
-                                    th('Federal State', style = 'text-align: center;')
-                                    th('Name', style = 'text-align: left;')
-                                    th('WCA Id', style = 'text-align: center;')
-                                    th('Value', style = 'text-align: right;')
-                                    th('WR', style = 'text-align: right;')
-                                    th('CR', style = 'text-align: right;')
-                                    th('NR', style = 'text-align: right;')
-                                    th('Country', style = 'text-align: center;')
-                            with tbody():
-                                for sid in s:
+                # combined sin table
+                with div():
+                    attr(style = 'overflow-x:auto;')
+                    with table():
+                        with thead():
+                            with tr():
+                                th('Event', style = 'text-align: center;')
+                                th('Federal State', style = 'text-align: center;')
+                                th('Name', style = 'text-align: left;')
+                                th('WCA Id', style = 'text-align: center;')
+                                th('Value', style = 'text-align: right;')
+                                th('WR', style = 'text-align: right;')
+                                th('CR', style = 'text-align: right;')
+                                th('NR', style = 'text-align: right;')
+                                th('Country', style = 'text-align: center;')
+                        with tbody():
+                            for es, s in zip(overview['single'].keys(),overview['single'].values()):
+                                len_s = len(s)
+                                if debug:
+                                    print(es, s)
+                                    print('len(s)', len_s)
+                                if len_s > 1:
+                                    for si, sid in enumerate(s):
+                                        with tr():
+                                            if si == 0:
+                                                td(img(src=f'../assets/event-svg/{es}.svg',
+                                                       style='text-align: center; height: 1.6rem; width: 1.6rem;'),
+                                                   rowspan=f'{len_s}',
+                                                   style = 'text-align: center; position: relative;')
+                                            td(sid[0], style = 'text-align: center;')
+                                            td(sid[2], style = 'text-align: left;')
+                                            td(a(sid[1], href=f'https://www.worldcubeassociation.org/persons/{sid[1]}'), style = 'text-align: center;')
+                                            if es not in ['333fm', '333mbf', '333mbo']:
+                                                td(util.centiseconds_to_human(sid[3]), style = 'text-align: right;')
+                                            elif es == '333mbf':
+                                                td(util.mbf_to_human(sid[3]), style = 'text-align: right;')
+                                            elif es == '333mbo':
+                                                td(util.mbo_to_human(sid[3]), style = 'text-align: right;')
+                                            else:
+                                                td(sid[3], style = 'text-align: right;')
+                                            td(sid[6], style = 'text-align: right;')
+                                            td(sid[5], style = 'text-align: right;')
+                                            td(sid[4], style = 'text-align: right;')
+                                            td(sid[7], style = 'text-align: center;')
+                                elif len_s == 1:
+                                    sid = s[0]
                                     if debug:
                                         print(sid)
                                     with tr():
+                                        td(img(src=f'../assets/event-svg/{es}.svg',
+                                               style='text-align: center; height: 1.6rem; width: 1.6rem;'),
+                                           rowspan=f'{len_s}',
+                                           style = 'text-align: center; position: relative;')
                                         td(sid[0], style = 'text-align: center;')
                                         td(sid[2], style = 'text-align: left;')
                                         td(a(sid[1], href=f'https://www.worldcubeassociation.org/persons/{sid[1]}'), style = 'text-align: center;')
@@ -323,26 +354,55 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                         td(sid[5], style = 'text-align: right;')
                                         td(sid[4], style = 'text-align: right;')
                                         td(sid[7], style = 'text-align: center;')
-                for ea, aa in zip(overview['average'].keys(),overview['average'].values()):
-                    if debug:
-                        print(ea, aa)
-                    text(ea + ' (Average)')
-                    with div():
-                        attr(style = 'overflow-x:auto;')
-                        with table():
-                            with thead():
-                                with tr():
-                                    th('Federal State', style = 'text-align: center;')
-                                    th('Name', style = 'text-align: left;')
-                                    th('WCA Id', style = 'text-align: center;')
-                                    th('Value', style = 'text-align: right;')
-                                    th('WR', style = 'text-align: right;')
-                                    th('CR', style = 'text-align: right;')
-                                    th('NR', style = 'text-align: right;')
-                                    th('Country', style = 'text-align: center;')
-                            with tbody():
-                                for aid in aa:
+                # combined avg table
+                with div():
+                    attr(style = 'overflow-x:auto;')
+                    with table():
+                        with thead():
+                            with tr():
+                                th('Event', style = 'text-align: center;')
+                                th('Federal State', style = 'text-align: center;')
+                                th('Name', style = 'text-align: left;')
+                                th('WCA Id', style = 'text-align: center;')
+                                th('Value', style = 'text-align: right;')
+                                th('WR', style = 'text-align: right;')
+                                th('CR', style = 'text-align: right;')
+                                th('NR', style = 'text-align: right;')
+                                th('Country', style = 'text-align: center;')
+                        with tbody():
+                            for ea, aa in zip(overview['average'].keys(),overview['average'].values()):
+                                len_a = len(aa)
+                                if debug:
+                                    print(ea, aa)
+                                    print('len(a)', len_a)
+                                if len_a > 1:
+                                    for ai, aid in enumerate(aa):
+                                        with tr():
+                                            if ai == 0:
+                                                td(img(src=f'../assets/event-svg/{ea}.svg',
+                                                       style='text-align: center; height: 1.6rem; width: 1.6rem;'),
+                                                   rowspan=f'{len_a}',
+                                                   style = 'text-align: center; position: relative;')
+                                            td(aid[0], style = 'text-align: center;')
+                                            td(aid[2], style = 'text-align: left;')
+                                            td(a(aid[1], href=f'https://www.worldcubeassociation.org/persons/{aid[1]}'), style = 'text-align: center;')
+                                            if es not in ['333fm']:
+                                                td(util.centiseconds_to_human(aid[3]), style = 'text-align: right;')
+                                            else:
+                                                td(aid[3], style = 'text-align: right;')
+                                            td(aid[6], style = 'text-align: right;')
+                                            td(aid[5], style = 'text-align: right;')
+                                            td(aid[4], style = 'text-align: right;')
+                                            td(aid[7], style = 'text-align: center;')
+                                elif len_a == 1:
+                                    aid = aa[0]
+                                    if debug:
+                                        print(aid)
                                     with tr():
+                                        td(img(src=f'../assets/event-svg/{ea}.svg',
+                                               style='text-align: center; height: 1.6rem; width: 1.6rem;'),
+                                           rowspan=f'{len_a}',
+                                           style = 'text-align: center; position: relative;')
                                         td(aid[0], style = 'text-align: center;')
                                         td(aid[2], style = 'text-align: left;')
                                         td(a(aid[1], href=f'https://www.worldcubeassociation.org/persons/{aid[1]}'), style = 'text-align: center;')
@@ -354,7 +414,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                         td(aid[5], style = 'text-align: right;')
                                         td(aid[4], style = 'text-align: right;')
                                         td(aid[7], style = 'text-align: center;')
-
+ 
         # main page
         elif variant == 'index':
             with div():
