@@ -284,8 +284,21 @@ def generate_html(variant = 'by-state', choice = 'bw'):
             with div():
                 # give class attribute, don't use python reserved keywords
                 attr(cls = 'container')
-                # this would also be a good place to improve such items with id or class attributes for easy styling
-                h2('WCA German State Ranks'+title_app)
+                with div():
+                    attr(style = 'overflow-x:auto;z-index: -1;')
+                    with div():
+                        attr(cls='butn-con')
+                        a('Overview',
+                          href=f'./overview_all.html',
+                          cls='w3-button w3-round w3-theme-d3link btn-active',
+                          style='width: 5.5rem; padding: 0; text-align: center; font-size: 0.7rem')
+                        for st in state_r.keys():
+                            a(st,
+                              href=f'./by-state_{st}.html',
+                              cls='w3-button w3-round w3-theme-d3link',
+                              style='width: 2.5rem; padding: 0; text-align: center; font-size: 0.7rem')
+
+                h3('WCA German State Ranks'+title_app)
                 # combined sin table
                 with div():
                     attr(style = 'overflow-x:auto;')
@@ -419,17 +432,39 @@ def generate_html(variant = 'by-state', choice = 'bw'):
         elif variant == 'index':
             with div():
                 attr(cls = 'container')
-                h2('WCA German State Ranks'+title_app)
+                h3('WCA German State Ranks'+title_app)
                 br()
-                a('Overview', href=f'pages/overview_all.html')
-                for st in state_r.keys():
-                    a(info.name_state[st], href=f'pages/by-state_{st}.html')
+                with div():
+                    with div():
+                        attr(cls='links-container')
+                        a('Overview', href=f'pages/overview_all.html', cls='w3-button w3-round w3-theme-d3link')
+                        for st in state_r.keys():
+                            a(info.name_state[st], href=f'pages/by-state_{st}.html', cls='w3-button w3-round w3-theme-d3link')
 
         # individual states
         else:
             with div():
                 attr(cls = 'container')
-                h2('WCA German State Ranks'+title_app)
+                with div():
+                    attr(style = 'overflow-x:auto;z-index: -1;')
+                    with div():
+                        attr(cls='butn-con')
+                        a('Overview',
+                          href=f'./overview_all.html',
+                          cls='w3-button w3-round w3-theme-d3link',
+                          style='width: 5.5rem;padding:0;text-align: center;font-size: 0.7rem')
+                        for st in state_r.keys():
+                            if st == choice:
+                                a(st,
+                                  href=f'./by-state_{st}.html',
+                                  cls='w3-button w3-round w3-theme-d3link btn-active',
+                                  style='width: 2.5rem;padding:0;text-align: center;font-size: 0.7rem')
+                            else:
+                                a(st,
+                                  href=f'./by-state_{st}.html',
+                                  cls='w3-button w3-round w3-theme-d3link',
+                                  style='width: 2.5rem;padding:0;text-align: center;font-size: 0.7rem')
+                h3('WCA German State Ranks'+title_app)
                 with label():
                     attr(cls = 'switch')
                     span('Show Non-DE')
@@ -473,13 +508,18 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                             with tr():
                                                 attr(cls='bgColRow')
                                                 td(sid[1], style = 'text-align: left;')
-                                                td(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'), style='text-align: center;')
+                                                td(a(sid[0],
+                                                     href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'),
+                                                   style='text-align: center;')
                                                 if es not in ['333fm', '333mbf', '333mbo']:
-                                                    td(util.centiseconds_to_human(sid[2]), style='text-align: right;')
+                                                    td(util.centiseconds_to_human(sid[2]), 
+                                                    style='text-align: right;')
                                                 elif es == '333mbf':
-                                                    td(util.mbf_to_human(sid[2]), style='text-align: right;')
+                                                    td(util.mbf_to_human(sid[2]),
+                                                       style='text-align: right;')
                                                 elif es == '333mbo':
-                                                    td(util.mbo_to_human(sid[2]), style='text-align: right;')
+                                                    td(util.mbo_to_human(sid[2]),
+                                                       style='text-align: right;')
                                                 else:
                                                     td(sid[2], style='text-align: right;')
                                                 td(sid[5], style='text-align: right;')
@@ -489,20 +529,31 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                         else:
                                             with tr():
                                                 attr(cls='bgColRow nonDE')
-                                                td(sid[1], style='font-style:italic;color:#A4A4A4;text-align: left;')
-                                                td(a(sid[0], href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'), style='font-style:italic;color:#A4A4A4;text-align: center;')
+                                                td(sid[1],
+                                                   style='font-style:italic;color:#A4A4A4;text-align: left;')
+                                                td(a(sid[0],
+                                                     href=f'https://www.worldcubeassociation.org/persons/{sid[0]}'),
+                                                   style='font-style:italic;color:#A4A4A4;text-align: center;')
                                                 if es not in ['333fm', '333mbf', '333mbo']:
-                                                    td(util.centiseconds_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                    td(util.centiseconds_to_human(sid[2]),
+                                                       style='font-style:italic;color:#A4A4A4;text-align: right;')
                                                 elif es == '333mbf':
-                                                    td(util.mbf_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                    td(util.mbf_to_human(sid[2]),
+                                                       style='font-style:italic;color:#A4A4A4;text-align: right;')
                                                 elif es == '333mbo':
-                                                    td(util.mbo_to_human(sid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                    td(util.mbo_to_human(sid[2]),
+                                                       style='font-style:italic;color:#A4A4A4;text-align: right;')
                                                 else:
-                                                    td(sid[2], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                                td(sid[5], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                                td(sid[4], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                                td(sid[3], style='font-style:italic;color:#A4A4A4;text-align: right;')
-                                                td(sid[6], style='font-style:italic;color:#A4A4A4;text-align: center;')
+                                                    td(sid[2],
+                                                       style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(sid[5],
+                                                   style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(sid[4],
+                                                   style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(sid[3],
+                                                   style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                td(sid[6],
+                                                   style='font-style:italic;color:#A4A4A4;text-align: center;')
                 for ea, aa in zip(a_dict.keys(),a_dict.values()):
                     with div():
                         if ea == '333':
@@ -528,7 +579,8 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                             with tr():
                                                 attr(cls='bgColRow')
                                                 td(aid[1], style = 'text-align: left;')
-                                                td(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'), style='text-align: center;')
+                                                td(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'),
+                                                   style='text-align: center;')
                                                 if es not in ['333fm']:
                                                     td(util.centiseconds_to_human(aid[2]), style='text-align: right;')
                                                 else:
@@ -541,11 +593,14 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                                             with tr():
                                                 attr(cls='bgColRow nonDE')
                                                 td(aid[1], style='font-style:italic;color:#A4A4A4;text-align: left;')
-                                                td(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'), style='font-style:italic;color:#A4A4A4;text-align: center;')
+                                                td(a(aid[0], href=f'https://www.worldcubeassociation.org/persons/{aid[0]}'),
+                                                   style='font-style:italic;color:#A4A4A4;text-align: center;')
                                                 if es not in ['333fm']:
-                                                    td(util.centiseconds_to_human(aid[2]), style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                    td(util.centiseconds_to_human(aid[2]),
+                                                       style='font-style:italic;color:#A4A4A4;text-align: right;')
                                                 else:
-                                                    td(aid[2], style='font-style:italic;color:#A4A4A4;text-align: right;')
+                                                    td(aid[2],
+                                                       style='font-style:italic;color:#A4A4A4;text-align: right;')
                                                 td(aid[5], style='font-style:italic;color:#A4A4A4;text-align: right;')
                                                 td(aid[4], style='font-style:italic;color:#A4A4A4;text-align: right;')
                                                 td(aid[3], style='font-style:italic;color:#A4A4A4;text-align: right;')
