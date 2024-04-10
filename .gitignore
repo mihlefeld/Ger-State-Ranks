@@ -1,9 +1,13 @@
 # Mac stuff
 .DS_Store
 
-# Don't clutter with this stuff
+# Don't clutter with this stuff (useful for development, but not for production)
 */.ipynb_checkpoints/*
 .ipynb_checkpoints/*
-
+**.ipynb
 **/*.pyc
+
+# local files are meant to be local
+local
+
 .venv
