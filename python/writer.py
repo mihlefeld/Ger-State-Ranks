@@ -285,7 +285,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                 # give class attribute, don't use python reserved keywords
                 attr(cls = 'container')
                 with div():
-                    attr(style = 'overflow-x:auto;z-index: -1;')
+                    attr(style = 'overflow-x:auto;')
                     with div():
                         attr(cls='butn-con')
                         a('Overview',
@@ -446,7 +446,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
             with div():
                 attr(cls = 'container')
                 with div():
-                    attr(style = 'overflow-x:auto;z-index: -1;')
+                    attr(style = 'overflow-x:auto;')
                     with div():
                         attr(cls='butn-con')
                         a('Overview',
@@ -472,7 +472,7 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                     span(cls = 'slider round')
                 br()
                 with div():
-                    attr(style = 'overflow-x:auto;z-index: -1;')
+                    attr(style = 'overflow-x:auto;')
                     with div():
                         attr(cls='btn-con')
                         for ev in e_list:
@@ -635,10 +635,10 @@ def generate_html(variant = 'by-state', choice = 'bw'):
         print('#'*8)
         print()
     if variant == 'index':
-        with open(f"{prefix}{variant}.html", "w") as text_file:
+        with open(f"{prefix}{variant}.html", "w", encoding='UTF-8') as text_file:
             print(doc, file=text_file)
     else:
-        with open(f"{prefix}{variant}_{choice}.html", "w") as text_file:
+        with open(f"{prefix}{variant}_{choice}.html", "w", encoding='UTF-8') as text_file:
             print(doc, file=text_file)
 
 
