@@ -618,11 +618,12 @@ def generate_html(variant = 'by-state', choice = 'bw'):
                 a('© Annika Stein, 2024.',
                   href='https://annikastein.github.io/',
                   target='_blank')
-
+            
         if variant == 'index':
             script(src='./js/script.js')
         else:
             script(src='../js/script.js')
+        script(data_id='101446349', _async=True, src='//static.getclicky.com/js')
 
     if debug:
         print()
