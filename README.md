@@ -12,4 +12,4 @@ Displaying the PRs of people who have given *explicit consent* (opt-in) to appea
 ## Data statement
 > This information is based on competition results owned and maintained by the
 > World Cube Assocation, published at https://worldcubeassociation.org/results
-> as of November 24, 2024.
+> as of November 25, 2024.
